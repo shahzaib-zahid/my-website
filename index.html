@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Accounts Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        meta: {
+                            blue: '#0064E0',
+                            hover: '#0052b6',
+                            dark: '#1c1e21',
+                            card: '#242526',
+                            border: '#393a3b',
+                            bg: '#18191a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+    </style>
+</head>
+<body class="h-full bg-gray-50 dark:bg-meta-bg text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200">
+
+    <div id="app" class="flex h-full overflow-hidden">
+        
+        <!-- Mobile Sidebar Overlay -->
+        <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden transition-opacity"></div>
+
+        <!-- Sidebar Navigation (Exact match to image_986fd8.png) -->
+        <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-30 w-80 bg-[#1c1d21] text-white border-r border-[#2d2f34] flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shrink-0 select-none">
+            
+            <!-- Sidebar Header Content -->
+            <div class="p-6 pb-2">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-1.5 text-white font-sans text-xl font-medium tracking-tight">
+                        <span class="text-2xl leading-none font-light">∞</span>
+                        <span class="font-bold text-lg tracking-tight">Meta</span>
+                    </div>
+                    <button onclick="toggleSidebar()" class="md:hidden text-gray-400 hover:text-white p-1 rounded-lg">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <h1 class="text-2xl font-bold text-white tracking-tight leading-tight mb-2">Accounts Center</h1>
+                <p class="text-[13px] text-[#b0b3b8] leading-relaxed mb-1">
+                    Manage your connected experiences and account settings across Meta technologies.
+                </p>
+                <a href="#" onclick="showToast('Opening Meta Accounts Center information...'); return false;" class="text-[13px] text-[#4599ff] hover:underline font-normal inline-block mb-3">
+                    Learn more
+                </a>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-3 pb-6 space-y-1">
+                
+                <!-- Profiles & Personal Details -->
+                <a href="#profiles" onclick="switchSection('profiles'); return false;" class="nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal" data-section="profiles">
+                    <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2] shrink-0" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span class="truncate">Profiles and personal details</span>
+                </a>
+
+                <!-- Account Settings Group Title -->
+                <div class="text-[15px] font-bold text-white px-3.5 pt-5 pb-1.5">
+                    Account settings
+                </div>
+
+                <!-- Password and Security -->
+                <a href="#password" onclick="switchSection('password'); return false;" class="nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all bg-[#e3e6ea] text-[#1c1d21] font-semibold" data-section="password">
+                    <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2] shrink-0" viewBox="0 0 24 24">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span class="truncate">Password and security</span>
+                </a>
+
+                <!-- Connected Experiences -->
+                <a href="#connected" onclick="switchSection('connected'); return false;" class="nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal" data-section="connected">
+                    <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2] shrink-0" viewBox="0 0 24 24">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                    <span class="truncate">Connected experiences</span>
+                </a>
+
+                <!-- Your Information and Permissions -->
+                <a href="#personal" onclick="switchSection('personal'); return false;" class="nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal" data-section="personal">
+                    <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2] shrink-0" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <circle cx="10" cy="13" r="2"></circle>
+                        <path d="M7 19c0-1.5 1.5-2.5 3-2.5s3 1 3 2.5"></path>
+                    </svg>
+                    <span class="truncate">Your information and permissions</span>
+                </a>
+
+                <!-- Ad Preferences -->
+                <a href="#ads" onclick="switchSection('ads'); return false;" class="nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal" data-section="ads">
+                    <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2] shrink-0" viewBox="0 0 24 24">
+                        <path d="M3 11l18-5v12L3 13v-2z"></path>
+                        <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path>
+                    </svg>
+                    <span class="truncate">Ad preferences</span>
+                </a>
+
+                <!-- Meta Pay -->
+                <a href="#metapay" onclick="switchSection('metapay'); return false;" class="nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal" data-section="metapay">
+                    <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2] shrink-0" viewBox="0 0 24 24">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                    <span class="truncate">Meta Pay</span>
+                </a>
+
+                <!-- Subscriptions -->
+                <a href="#subscriptions" onclick="switchSection('subscriptions'); return false;" class="nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal" data-section="subscriptions">
+                    <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2] shrink-0" viewBox="0 0 24 24">
+                        <path d="M17 2l4 4-4 4"></path>
+                        <path d="M3 11v-1a4 4 0 0 1 4-4h14"></path>
+                        <path d="M7 22l-4-4 4-4"></path>
+                        <path d="M21 13v1a4 4 0 0 1-4 4H3"></path>
+                    </svg>
+                    <span class="truncate">Subscriptions</span>
+                </a>
+
+                <!-- Manage Accounts -->
+                <a href="#manage" onclick="switchSection('manage'); return false;" class="nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal" data-section="manage">
+                    <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2] shrink-0" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="10" r="3"></circle>
+                        <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+                    </svg>
+                    <span class="truncate">Manage accounts</span>
+                </a>
+
+            </nav>
+
+            <!-- Bottom Theme Toggle Footer -->
+            <div class="p-4 border-t border-[#2d2f34] flex items-center justify-between text-xs text-gray-400">
+                <span>Meta © 2026</span>
+                <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-[#2b2c31] hover:bg-[#3a3b40] text-gray-300 transition-colors" title="Toggle theme">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col min-w-0 overflow-y-auto bg-[#f7f9fc] dark:bg-meta-bg">
+            <!-- Top Header Bar with Breadcrumbs & Search Bar (Exact match to image_987758.png) -->
+            <header class="sticky top-0 z-10 bg-[#f7f9fc]/90 dark:bg-meta-bg/90 backdrop-blur-md border-b border-gray-200/60 dark:border-meta-border px-8 py-3.5 flex items-center justify-between">
+                <div class="flex items-center space-x-3 text-sm">
+                    <button onclick="toggleSidebar()" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-blue-600 mr-2">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <!-- Breadcrumbs -->
+                    <a href="#overview" onclick="switchSection('overview'); return false;" class="font-medium text-[#0064e0] dark:text-blue-400 hover:underline">
+                        Meta Accounts Center
+                    </a>
+                    <span class="text-gray-400 dark:text-gray-600 font-light">/</span>
+                    <span id="breadcrumbCurrent" class="font-bold text-gray-900 dark:text-white">
+                        Password and security
+                    </span>
+                </div>
+
+                <!-- Top Right Controls: Search Pill & Help Circle -->
+                <div class="flex items-center space-x-3">
+                    <div class="relative hidden sm:block w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
+                        <input type="text" placeholder="Search settings..." class="w-full pl-9 pr-4 py-2 bg-[#eef2f6] dark:bg-zinc-800 border-0 rounded-full text-xs text-gray-800 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                    </div>
+                    <button onclick="showToast('Help center opened')" class="w-9 h-9 rounded-full bg-[#eef2f6] dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 flex items-center justify-center text-gray-700 dark:text-gray-300 transition-colors" title="Help Center">
+                        <i class="fa-regular fa-circle-question text-base"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dynamic Views Container -->
+            <div class="flex-1 p-8 max-w-4xl w-full">
+
+                <section id="section-overview" class="space-y-6 hidden">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-2xl shadow-md relative overflow-hidden">
+                        <div class="relative z-10">
+                            <h2 class="text-xl font-bold mb-1">Welcome back, usereccc1</h2>
+                            <p class="text-xs text-blue-100 max-w-md">Manage your account settings, privacy preferences, and security across all connected Meta platforms in one place.</p>
+                        </div>
+                        <div class="absolute right-4 -bottom-10 opacity-10 text-9xl">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                    </div>
+
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Quick Settings</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Card 1 -->
+                        <div onclick="switchSection('profiles')" class="bg-white dark:bg-meta-card p-5 rounded-2xl border border-gray-200 dark:border-meta-border hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition shadow-sm group">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-user-gear"></i>
+                            </div>
+                            <h5 class="font-semibold text-base mb-1">Personal Details</h5>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Update email (ejsiceka@icloud.com), birthday (April 16, 2007), and identity.</p>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div onclick="switchSection('password')" class="bg-white dark:bg-meta-card p-5 rounded-2xl border border-gray-200 dark:border-meta-border hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition shadow-sm group">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h5 class="font-semibold text-base mb-1">Password & Security</h5>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Secure your account with 2FA, password updates, and login alerts.</p>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div onclick="switchSection('metapay')" class="bg-white dark:bg-meta-card p-5 rounded-2xl border border-gray-200 dark:border-meta-border hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition shadow-sm group">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <h5 class="font-semibold text-base mb-1">Meta Pay</h5>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Add secure payment methods and manage your checkout preferences.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-profiles" class="space-y-6 hidden">
+                    <div class="bg-white dark:bg-meta-card rounded-2xl border border-gray-200 dark:border-meta-border p-6 shadow-sm">
+                        <div class="flex items-center space-x-4 mb-6 pb-6 border-b border-gray-100 dark:border-meta-border">
+                            <!-- Empty Profile Picture Avatar -->
+                            <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center text-gray-400 dark:text-gray-500 text-2xl font-semibold">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 dark:text-white">usereccc1</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Meta Account Profile</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3.5 hover:bg-gray-50 dark:hover:bg-zinc-800/50 rounded-xl transition">
+                                <div>
+                                    <span class="block text-xs text-gray-400">Name</span>
+                                    <span class="text-sm font-semibold">usereccc1</span>
+                                </div>
+                                <button onclick="openEditModal('Name', 'usereccc1')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3.5 hover:bg-gray-50 dark:hover:bg-zinc-800/50 rounded-xl transition">
+                                <div>
+                                    <span class="block text-xs text-gray-400">Contact Email</span>
+                                    <span class="text-sm font-semibold">ejsiceka@icloud.com</span>
+                                </div>
+                                <button onclick="openEditModal('Contact Email', 'ejsiceka@icloud.com')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3.5 hover:bg-gray-50 dark:hover:bg-zinc-800/50 rounded-xl transition">
+                                <div>
+                                    <span class="block text-xs text-gray-400">Birthday</span>
+                                    <span class="text-sm font-semibold">April 16, 2007</span>
+                                </div>
+                                <button onclick="openEditModal('Birthday', 'April 16, 2007')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-password" class="space-y-6">
+                    <!-- Page Header Title & Subtitle -->
+                    <div class="mb-6">
+                        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-2">Password and security</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Update your password, enable two-factor authentication, and monitor active sessions.</p>
+                    </div>
+
+                    <!-- Change Password Container Card -->
+                    <div class="bg-white dark:bg-meta-card rounded-2xl border border-gray-200/80 dark:border-meta-border p-7 shadow-sm">
+                        <!-- Card Tile Header -->
+                        <div class="flex items-start space-x-3.5 mb-6">
+                            <div class="w-10 h-10 rounded-2xl bg-[#e7f0ff] dark:bg-blue-900/40 text-[#0064e0] dark:text-blue-400 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 stroke-current fill-none stroke-[2.2]" viewBox="0 0 24 24">
+                                    <path d="M21 2l-2 2m-2 2l-2 2m2-2l2 2m-7.5 4.5a5 5 0 1 1-7.07-7.07 5 5 0 0 1 7.07 7.07zM13 11l8 8v3h-3l-2-2v-2l-2-2v-2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-900 dark:text-white leading-tight">Change password</h2>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Choose a strong password with letters, numbers, and symbols.</p>
+                            </div>
+                        </div>
+
+                        <!-- Change Password Form -->
+                        <form onsubmit="handlePasswordSubmit(event)" id="passwordForm" class="space-y-4 max-w-lg">
+                            <!-- Current Password Field -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-900 dark:text-gray-200 mb-1.5">Current Password</label>
+                                <div class="relative flex items-center">
+                                    <input type="password" id="currentPasswordInput" required placeholder="Enter current password" class="w-full pr-16 pl-4 py-2.5 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                    <button type="button" onclick="togglePasswordVisibility('currentPasswordInput', this)" class="absolute right-4 text-xs font-bold text-[#0064e0] hover:text-blue-700 dark:text-blue-400">
+                                        Show
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- New Password Field -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-900 dark:text-gray-200 mb-1.5">New Password</label>
+                                <div class="relative flex items-center">
+                                    <input type="password" id="newPasswordInput" required oninput="checkPasswordStrength(this.value)" placeholder="Enter at least 12 characters" class="w-full pr-16 pl-4 py-2.5 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                    <button type="button" onclick="togglePasswordVisibility('newPasswordInput', this)" class="absolute right-4 text-xs font-bold text-[#0064e0] hover:text-blue-700 dark:text-blue-400">
+                                        Show
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Password Strength Bar & Status -->
+                            <div class="space-y-1.5 pt-0.5">
+                                <div class="w-full h-1 bg-gray-100 dark:bg-zinc-700 rounded-full overflow-hidden">
+                                    <div id="strengthBar" class="h-full w-0 bg-gray-300 transition-all duration-300"></div>
+                                </div>
+                                <p id="strengthText" class="text-xs text-gray-400 font-normal">Password strength: None</p>
+                            </div>
+
+                            <!-- Confirm New Password Field -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-900 dark:text-gray-200 mb-1.5">Confirm New Password</label>
+                                <div class="relative flex items-center">
+                                    <input type="password" id="confirmPasswordInput" required placeholder="Re-enter new password" class="w-full px-4 py-2.5 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="pt-3 flex items-center space-x-4">
+                                <button type="submit" class="px-5 py-2.5 bg-[#0064e0] hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition shadow-sm">
+                                    Update Password
+                                </button>
+                                <button type="button" onclick="resetPasswordForm()" class="px-3 py-2.5 text-gray-700 dark:text-gray-300 hover:text-gray-900 font-semibold text-xs transition">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="section-personal" class="space-y-6 hidden">
+                    <div class="bg-white dark:bg-meta-card rounded-2xl border border-gray-200 dark:border-meta-border p-6 shadow-sm">
+                        <h3 class="text-lg font-bold mb-1">Your information and permissions</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Review how you share information and manage your activity.</p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-5 border border-gray-200 dark:border-meta-border rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 cursor-pointer transition" onclick="showToast('Downloading your information archive...')">
+                                <i class="fa-solid fa-download text-blue-600 text-xl mb-2"></i>
+                                <h4 class="font-semibold text-sm mb-1">Download your information</h4>
+                                <p class="text-xs text-gray-500">Get a copy of what you've shared on Meta.</p>
+                            </div>
+
+                            <div class="p-5 border border-gray-200 dark:border-meta-border rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 cursor-pointer transition" onclick="showToast('Transfer copy tool opened')">
+                                <i class="fa-solid fa-arrow-right-arrow-left text-purple-600 text-xl mb-2"></i>
+                                <h4 class="font-semibold text-sm mb-1">Transfer a copy of your information</h4>
+                                <p class="text-xs text-gray-500">Transfer your photos and posts to another service.</p>
+                            </div>
+
+                            <div class="p-5 border border-gray-200 dark:border-meta-border rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 cursor-pointer transition" onclick="showToast('Activity log opened')">
+                                <i class="fa-solid fa-clock-rotate-left text-emerald-600 text-xl mb-2"></i>
+                                <h4 class="font-semibold text-sm mb-1">Activity off Meta technologies</h4>
+                                <p class="text-xs text-gray-500">Manage activity that businesses share with us.</p>
+                            </div>
+
+                            <div class="p-5 border border-gray-200 dark:border-meta-border rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 cursor-pointer transition" onclick="showToast('Search history cleared')">
+                                <i class="fa-solid fa-magnifying-glass text-amber-600 text-xl mb-2"></i>
+                                <h4 class="font-semibold text-sm mb-1">Search history</h4>
+                                <p class="text-xs text-gray-500">Review and clear recent searches.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-connected" class="space-y-6 hidden">
+                    <div class="bg-white dark:bg-meta-card rounded-2xl border border-gray-200 dark:border-meta-border p-6 shadow-sm">
+                        <h3 class="text-lg font-bold mb-1">Connected experiences</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Manage sharing across profiles and connected accounts.</p>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/60 rounded-xl">
+                                <div>
+                                    <h4 class="text-sm font-semibold">Sharing across profiles</h4>
+                                    <p class="text-xs text-gray-500">Automatically share your Facebook posts or stories to Instagram.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer" onchange="showToast('Cross-sharing preference updated')">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/60 rounded-xl">
+                                <div>
+                                    <h4 class="text-sm font-semibold">Logging in with accounts</h4>
+                                    <p class="text-xs text-gray-500">Use one account to log into another across Meta apps.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer" onchange="showToast('Login sharing preference updated')">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-ads" class="space-y-6 hidden">
+                    <div class="bg-white dark:bg-meta-card rounded-2xl border border-gray-200 dark:border-meta-border p-6 shadow-sm">
+                        <h3 class="text-lg font-bold mb-1">Ad preferences</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Control how ads are tailored to you based on your activity and topics.</p>
+
+                        <div class="space-y-4">
+                            <div class="p-4 border border-gray-200 dark:border-meta-border rounded-xl flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-semibold text-sm">Ad topics</h4>
+                                    <p class="text-xs text-gray-500">Choose to see more or fewer ads about specific topics (e.g., alcohol, parenting).</p>
+                                </div>
+                                <button onclick="showToast('Opening ad topics settings')" class="px-4 py-2 bg-gray-100 dark:bg-zinc-800 text-xs font-semibold rounded-xl">Manage</button>
+                            </div>
+
+                            <div class="p-4 border border-gray-200 dark:border-meta-border rounded-xl flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-semibold text-sm">Ad settings</h4>
+                                    <p class="text-xs text-gray-500">Manage how data from partners is used to show you ads.</p>
+                                </div>
+                                <button onclick="showToast('Opening partner ad settings')" class="px-4 py-2 bg-gray-100 dark:bg-zinc-800 text-xs font-semibold rounded-xl">Review</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-metapay" class="space-y-6 hidden">
+                    <div class="bg-white dark:bg-meta-card rounded-2xl border border-gray-200 dark:border-meta-border p-6 shadow-sm">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold">Meta Pay</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Simple, secure payments across Meta technologies.</p>
+                            </div>
+                        </div>
+
+                        <!-- Saved Payment Methods Section -->
+                        <div class="mt-8 pt-6 border-t border-gray-100 dark:border-meta-border">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-200">Payment methods</h4>
+                                <span class="text-xs px-2.5 py-1 bg-gray-100 dark:bg-zinc-800 text-gray-500 rounded-lg">0 Saved</span>
+                            </div>
+
+                            <!-- Empty Saved Methods Notice -->
+                            <div class="text-center py-8 px-4 bg-gray-50 dark:bg-zinc-800/40 rounded-xl border border-dashed border-gray-200 dark:border-zinc-700 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto mb-3 text-lg">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                </div>
+                                <h5 class="font-semibold text-sm mb-1">No payment methods saved</h5>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-4">You have no saved cards or wallets. Add a payment method to make fast and secure purchases.</p>
+                                <button onclick="openAddPaymentModal()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-xs transition shadow-sm inline-flex items-center space-x-2">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Add payment method</span>
+                                </button>
+                            </div>
+
+                            <!-- Add Payment Method Interface Box -->
+                            <div class="p-5 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl border border-purple-200/50 dark:border-purple-900/30">
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                    <div>
+                                        <h5 class="font-semibold text-sm mb-1">Ready to add a card or PayPal?</h5>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Meta Pay protects your payment info with advanced encryption.</p>
+                                    </div>
+                                    <button onclick="openAddPaymentModal()" class="w-full sm:w-auto px-5 py-2.5 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-blue-600 dark:text-blue-400 border border-gray-200 dark:border-zinc-700 rounded-xl font-semibold text-xs transition shadow-sm">
+                                        Add payment method
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-subscriptions" class="space-y-6 hidden">
+                    <div class="bg-white dark:bg-meta-card rounded-2xl border border-gray-200 dark:border-meta-border p-6 shadow-sm">
+                        <h3 class="text-lg font-bold mb-1">Subscriptions</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Manage your active creator and platform subscriptions.</p>
+
+                        <div class="text-center py-10">
+                            <i class="fa-solid fa-receipt text-4xl text-gray-300 dark:text-zinc-700 mb-3"></i>
+                            <h4 class="font-semibold text-sm mb-1">No active subscriptions</h4>
+                            <p class="text-xs text-gray-500">You are not currently subscribed to any creator badges or services.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-manage" class="space-y-6 hidden">
+                    <div class="bg-white dark:bg-meta-card rounded-2xl border border-gray-200 dark:border-meta-border p-6 shadow-sm">
+                        <h3 class="text-lg font-bold mb-1">Manage accounts</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Add or remove accounts from your Accounts Center.</p>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/60 rounded-xl">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center font-bold">
+                                        U
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold">usereccc1 (Facebook)</h4>
+                                        <p class="text-xs text-gray-500">Connected account</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-emerald-600 font-medium px-2.5 py-1 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg">Primary</span>
+                            </div>
+
+                            <button onclick="showToast('Account linking wizard opened')" class="w-full py-3 border-2 border-dashed border-gray-300 dark:border-zinc-700 hover:border-blue-500 text-gray-600 dark:text-gray-300 rounded-xl font-semibold text-xs transition flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Add accounts</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Information Modal -->
+    <div id="editModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-meta-card rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-200 dark:border-meta-border transform transition-all">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="modalTitle" class="text-lg font-bold">Edit Details</h3>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <p id="modalDesc" class="text-xs text-gray-500 mb-4">Update your account details below.</p>
+            <div class="space-y-4">
+                <div>
+                    <label id="modalInputLabel" class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">Value</label>
+                    <input type="text" id="modalInputValue" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button onclick="closeEditModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200">Cancel</button>
+                <button onclick="saveModalData()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Payment Method Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-meta-card rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-200 dark:border-meta-border transform transition-all">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold">Add payment method</h3>
+                <button onclick="closeAddPaymentModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form onsubmit="handlePaymentSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">Card Number</label>
+                    <div class="relative">
+                        <input type="text" required placeholder="4242 •••• •••• ••••" class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fa-solid fa-credit-card absolute left-3.5 top-3.5 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">Expiration Date</label>
+                        <input type="text" required placeholder="MM/YY" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">CVV</label>
+                        <input type="password" required placeholder="123" maxlength="4" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">Billing ZIP / Postal Code</label>
+                    <input type="text" required placeholder="90210" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" onclick="closeAddPaymentModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white">Save Card</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 text-xs font-semibold">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toastMessage">Action completed successfully</span>
+    </div>
+
+    <script>
+        // Navigation Section Switcher
+        function switchSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('main section');
+            sections.forEach(sec => sec.classList.add('hidden'));
+
+            // Show target section
+            const target = document.getElementById(`section-${sectionId}`);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update active sidebar pill styling to match image_986fd8.png
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                const isSelected = item.getAttribute('data-section') === sectionId;
+                if (isSelected) {
+                    item.className = 'nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all bg-[#e3e6ea] text-[#1c1d21] font-semibold';
+                } else {
+                    item.className = 'nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal';
+                }
+            });
+
+            // Update Top Breadcrumb Text
+            const breadcrumbTitles = {
+                overview: "Accounts Center",
+                profiles: "Profiles and personal details",
+                password: "Password and security",
+                personal: "Your information and permissions",
+                connected: "Connected experiences",
+                ads: "Ad preferences",
+                metapay: "Meta Pay",
+                subscriptions: "Subscriptions",
+                manage: "Manage accounts"
+            };
+
+            const breadcrumbEl = document.getElementById('breadcrumbCurrent');
+            if (breadcrumbEl && breadcrumbTitles[sectionId]) {
+                breadcrumbEl.innerText = breadcrumbTitles[sectionId];
+            }
+
+            // Close mobile sidebar if open
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Toggle Password Field Visibility
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerText = 'Hide';
+            } else {
+                input.type = 'password';
+                btn.innerText = 'Show';
+            }
+        }
+
+        // Password Strength Indicator Calculation
+        function checkPasswordStrength(val) {
+            const bar = document.getElementById('strengthBar');
+            const text = document.getElementById('strengthText');
+            if (!bar || !text) return;
+            
+            if (!val || val.length === 0) {
+                bar.style.width = '0%';
+                bar.className = 'h-full w-0 bg-gray-300 transition-all duration-300';
+                text.innerText = 'Password strength: None';
+                text.className = 'text-xs text-gray-400 font-normal';
+                return;
+            }
+
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (val.length >= 12) score++;
+            if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+
+            if (score <= 2) {
+                bar.style.width = '33%';
+                bar.className = 'h-full bg-red-500 transition-all duration-300';
+                text.innerText = 'Password strength: Weak';
+                text.className = 'text-xs text-red-500 font-medium';
+            } else if (score <= 4) {
+                bar.style.width = '66%';
+                bar.className = 'h-full bg-amber-500 transition-all duration-300';
+                text.innerText = 'Password strength: Medium';
+                text.className = 'text-xs text-amber-600 dark:text-amber-400 font-medium';
+            } else {
+                bar.style.width = '100%';
+                bar.className = 'h-full bg-emerald-500 transition-all duration-300';
+                text.innerText = 'Password strength: Strong';
+                text.className = 'text-xs text-emerald-600 dark:text-emerald-400 font-medium';
+            }
+        }
+
+        // Handle Password Form Submission
+        function handlePasswordSubmit(e) {
+            e.preventDefault();
+            const newPass = document.getElementById('newPasswordInput').value;
+            const confirmPass = document.getElementById('confirmPasswordInput').value;
+
+            if (newPass.length < 12) {
+                showToast('New password must be at least 12 characters');
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                showToast('New passwords do not match');
+                return;
+            }
+
+            showToast('Password updated successfully!');
+            resetPasswordForm();
+        }
+
+        // Reset Password Form Fields
+        function resetPasswordForm() {
+            const form = document.getElementById('passwordForm');
+            if (form) form.reset();
+            checkPasswordStrength('');
+        }
+
+        // Mobile Sidebar Controls
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            }
+        }
+
+        // Dark Mode Theme Switcher
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const icon = document.getElementById('themeIcon');
+            if (icon) {
+                if (html.classList.contains('dark')) {
+                    icon.className = "fa-solid fa-sun";
+                } else {
+                    icon.className = "fa-solid fa-moon";
+                }
+            }
+        }
+
+        // Edit Profile Details Modal
+        function openEditModal(field, currentVal) {
+            document.getElementById('modalTitle').innerText = `Edit ${field}`;
+            document.getElementById('modalInputLabel').innerText = field;
+            document.getElementById('modalInputValue').value = currentVal;
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        function saveModalData() {
+            closeEditModal();
+            showToast('Changes saved successfully');
+        }
+
+        // Add Payment Method Modal
+        function openAddPaymentModal() {
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+
+        function closeAddPaymentModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+        }
+
+        function handlePaymentSubmit(e) {
+            e.preventDefault();
+            closeAddPaymentModal();
+            showToast('Payment method added successfully');
+        }
+
+        // Toast Alert System
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        // Initial setup on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(`section-${hash}`)) {
+                switchSection(hash);
+            } else {
+                switchSection('password');
+            }
+        });
+    </script>
+</body>
+</html>
