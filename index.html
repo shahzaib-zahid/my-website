@@ -166,7 +166,7 @@
         </aside>
 
         <main class="flex-1 flex flex-col min-w-0 overflow-y-auto bg-[#f7f9fc] dark:bg-meta-bg">
-            <!-- Top Header Bar with Breadcrumbs & Search Bar (Exact match to image_987758.png) -->
+            <!-- Top Header Bar with Breadcrumbs & Search Bar -->
             <header class="sticky top-0 z-10 bg-[#f7f9fc]/90 dark:bg-meta-bg/90 backdrop-blur-md border-b border-gray-200/60 dark:border-meta-border px-8 py-3.5 flex items-center justify-between">
                 <div class="flex items-center space-x-3 text-sm">
                     <button onclick="toggleSidebar()" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-blue-600 mr-2">
@@ -182,9 +182,13 @@
                     </span>
                 </div>
 
-                <!-- Top Right Controls: Search Pill & Help Circle -->
+                <!-- Top Right Controls: Search Pill & Help Circle & Backend Status -->
                 <div class="flex items-center space-x-3">
-                    <div class="relative hidden sm:block w-64">
+                    <!-- Real-Time Cloud Sync Indicator -->
+                    <div id="cloudSyncStatus" class="inline-flex items-center text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800/40 transition-all">
+                        <i class="fa-solid fa-cloud-check mr-1.5 text-xs"></i> Connecting...
+                    </div>
+                    <div class="relative hidden sm:block w-60">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
                         <input type="text" placeholder="Search settings..." class="w-full pl-9 pr-4 py-2 bg-[#eef2f6] dark:bg-zinc-800 border-0 rounded-full text-xs text-gray-800 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                     </div>
@@ -248,7 +252,7 @@
                                 <i class="fa-solid fa-user"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-900 dark:text-white">usereccc1</h3>
+                                <h3 id="profileHeaderName" class="text-lg font-bold text-gray-900 dark:text-white">usereccc1</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Meta Account Profile</p>
                             </div>
                         </div>
@@ -257,25 +261,25 @@
                             <div class="flex items-center justify-between p-3.5 hover:bg-gray-50 dark:hover:bg-zinc-800/50 rounded-xl transition">
                                 <div>
                                     <span class="block text-xs text-gray-400">Name</span>
-                                    <span class="text-sm font-semibold">usereccc1</span>
+                                    <span id="profileNameDisplay" class="text-sm font-semibold">usereccc1</span>
                                 </div>
-                                <button onclick="openEditModal('Name', 'usereccc1')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
+                                <button onclick="openEditModal('name', 'Name')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
                             </div>
 
                             <div class="flex items-center justify-between p-3.5 hover:bg-gray-50 dark:hover:bg-zinc-800/50 rounded-xl transition">
                                 <div>
                                     <span class="block text-xs text-gray-400">Contact Email</span>
-                                    <span class="text-sm font-semibold">ejsiceka@icloud.com</span>
+                                    <span id="profileEmailDisplay" class="text-sm font-semibold">ejsiceka@icloud.com</span>
                                 </div>
-                                <button onclick="openEditModal('Contact Email', 'ejsiceka@icloud.com')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
+                                <button onclick="openEditModal('email', 'Contact Email')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
                             </div>
 
                             <div class="flex items-center justify-between p-3.5 hover:bg-gray-50 dark:hover:bg-zinc-800/50 rounded-xl transition">
                                 <div>
                                     <span class="block text-xs text-gray-400">Birthday</span>
-                                    <span class="text-sm font-semibold">April 16, 2007</span>
+                                    <span id="profileBirthdayDisplay" class="text-sm font-semibold">April 16, 2007</span>
                                 </div>
-                                <button onclick="openEditModal('Birthday', 'April 16, 2007')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
+                                <button onclick="openEditModal('birthday', 'Birthday')" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Edit</button>
                             </div>
                         </div>
                     </div>
@@ -401,7 +405,7 @@
                                     <p class="text-xs text-gray-500">Automatically share your Facebook posts or stories to Instagram.</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" checked class="sr-only peer" onchange="showToast('Cross-sharing preference updated')">
+                                    <input type="checkbox" id="sharingToggle" checked class="sr-only peer" onchange="toggleSetting('sharingAcrossProfiles', this.checked)">
                                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
                             </div>
@@ -412,7 +416,7 @@
                                     <p class="text-xs text-gray-500">Use one account to log into another across Meta apps.</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" checked class="sr-only peer" onchange="showToast('Login sharing preference updated')">
+                                    <input type="checkbox" id="loginToggle" checked class="sr-only peer" onchange="toggleSetting('loginWithAccounts', this.checked)">
                                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
                             </div>
@@ -457,37 +461,15 @@
                             </div>
                         </div>
 
-                        <!-- Saved Payment Methods Section -->
+                        <!-- Dynamic Saved Payment Methods Container -->
                         <div class="mt-8 pt-6 border-t border-gray-100 dark:border-meta-border">
                             <div class="flex items-center justify-between mb-4">
                                 <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-200">Payment methods</h4>
-                                <span class="text-xs px-2.5 py-1 bg-gray-100 dark:bg-zinc-800 text-gray-500 rounded-lg">0 Saved</span>
+                                <span id="paymentCountBadge" class="text-xs px-2.5 py-1 bg-gray-100 dark:bg-zinc-800 text-gray-500 rounded-lg">0 Saved</span>
                             </div>
 
-                            <!-- Empty Saved Methods Notice -->
-                            <div class="text-center py-8 px-4 bg-gray-50 dark:bg-zinc-800/40 rounded-xl border border-dashed border-gray-200 dark:border-zinc-700 mb-6">
-                                <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto mb-3 text-lg">
-                                    <i class="fa-solid fa-credit-card"></i>
-                                </div>
-                                <h5 class="font-semibold text-sm mb-1">No payment methods saved</h5>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-4">You have no saved cards or wallets. Add a payment method to make fast and secure purchases.</p>
-                                <button onclick="openAddPaymentModal()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-xs transition shadow-sm inline-flex items-center space-x-2">
-                                    <i class="fa-solid fa-plus"></i>
-                                    <span>Add payment method</span>
-                                </button>
-                            </div>
-
-                            <!-- Add Payment Method Interface Box -->
-                            <div class="p-5 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl border border-purple-200/50 dark:border-purple-900/30">
-                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                    <div>
-                                        <h5 class="font-semibold text-sm mb-1">Ready to add a card or PayPal?</h5>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400">Meta Pay protects your payment info with advanced encryption.</p>
-                                    </div>
-                                    <button onclick="openAddPaymentModal()" class="w-full sm:w-auto px-5 py-2.5 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-blue-600 dark:text-blue-400 border border-gray-200 dark:border-zinc-700 rounded-xl font-semibold text-xs transition shadow-sm">
-                                        Add payment method
-                                    </button>
-                                </div>
+                            <div id="paymentMethodsContainer">
+                                <!-- Rendered dynamically by JavaScript state engine -->
                             </div>
                         </div>
                     </div>
@@ -573,14 +555,14 @@
                 <div>
                     <label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">Card Number</label>
                     <div class="relative">
-                        <input type="text" required placeholder="4242 •••• •••• ••••" class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="cardNumberInput" required placeholder="4242 •••• •••• ••••" class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <i class="fa-solid fa-credit-card absolute left-3.5 top-3.5 text-gray-400"></i>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">Expiration Date</label>
-                        <input type="text" required placeholder="MM/YY" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="cardExpInput" required placeholder="MM/YY" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">CVV</label>
@@ -605,31 +587,216 @@
         <span id="toastMessage">Action completed successfully</span>
     </div>
 
-    <script>
-        // Navigation Section Switcher
-        function switchSection(sectionId) {
-            // Hide all sections
+    <!-- Firebase Backend Module & Full Frontend State Manager -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Pre-configured with YOUR Firebase Project (LoginApp / loginapp-4d9c6)
+        const firebaseConfig = {
+          apiKey: "AIzaSyCmprc385goKxOi8Q_KuvjidYDcfJ1cxWQ",
+          authDomain: "loginapp-4d9c6.firebaseapp.com",
+          databaseURL: "https://loginapp-4d9c6.firebaseio.com",
+          projectId: "loginapp-4d9c6",
+          storageBucket: "loginapp-4d9c6.firebasestorage.app",
+          messagingSenderId: "708677550821",
+          appId: "1:708677550821:web:29db4b6c8293781d5cca0c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app); // Automatically connects to database '(default)'
+
+        let currentUserId = null;
+        let userDocRef = null;
+        let activeFieldKey = null;
+
+        // Default Frontend State Object
+        let localState = {
+            name: 'usereccc1',
+            email: 'ejsiceka@icloud.com',
+            birthday: 'April 16, 2007',
+            sharingAcrossProfiles: true,
+            loginWithAccounts: true,
+            paymentMethods: [],
+            lastPasswordUpdate: 'Never'
+        };
+
+        // Initialize Firebase Authentication & Real-time Backend Listener
+        async function initBackendService() {
+            try {
+                let user;
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    const res = await signInWithCustomToken(auth, __initial_auth_token);
+                    user = res.user;
+                } else {
+                    const res = await signInAnonymously(auth);
+                    user = res.user;
+                }
+
+                currentUserId = user.uid;
+                // Path in Firestore: /users/{userId}
+                userDocRef = doc(db, 'users', currentUserId);
+
+                // Real-time Firestore Document Listener
+                onSnapshot(userDocRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        localState = { ...localState, ...snapshot.data() };
+                        renderUIFromState();
+                        updateSyncBadge('Cloud Synced', 'emerald');
+                    } else {
+                        // Create initial document on Firestore for new user
+                        setDoc(userDocRef, localState);
+                        renderUIFromState();
+                        updateSyncBadge('Cloud Synced', 'emerald');
+                    }
+                }, (error) => {
+                    console.warn("Firestore listener warning/permission issue:", error);
+                    renderUIFromState();
+                    updateSyncBadge('Firestore Active (Local Fallback)', 'amber');
+                });
+
+            } catch (err) {
+                console.warn("Auth/Backend fallback warning:", err);
+                renderUIFromState();
+                updateSyncBadge('Offline Mode', 'amber');
+            }
+        }
+
+        // Render & Synchronize State to Frontend DOM Elements
+        function renderUIFromState() {
+            // Profile details
+            const nameEl = document.getElementById('profileNameDisplay');
+            const emailEl = document.getElementById('profileEmailDisplay');
+            const birthdayEl = document.getElementById('profileBirthdayDisplay');
+            const headerNameEl = document.getElementById('profileHeaderName');
+
+            if (nameEl) nameEl.innerText = localState.name || 'usereccc1';
+            if (headerNameEl) headerNameEl.innerText = localState.name || 'usereccc1';
+            if (emailEl) emailEl.innerText = localState.email || 'ejsiceka@icloud.com';
+            if (birthdayEl) birthdayEl.innerText = localState.birthday || 'April 16, 2007';
+
+            // Connected Toggles
+            const sharingToggle = document.getElementById('sharingToggle');
+            const loginToggle = document.getElementById('loginToggle');
+
+            if (sharingToggle) sharingToggle.checked = !!localState.sharingAcrossProfiles;
+            if (loginToggle) loginToggle.checked = !!localState.loginWithAccounts;
+
+            // Meta Pay Payment Methods
+            renderPaymentMethods();
+        }
+
+        // Render Saved Cards in Meta Pay
+        function renderPaymentMethods() {
+            const container = document.getElementById('paymentMethodsContainer');
+            const badge = document.getElementById('paymentCountBadge');
+            if (!container || !badge) return;
+
+            const cards = localState.paymentMethods || [];
+            badge.innerText = `${cards.length} Saved`;
+
+            if (cards.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 px-4 bg-gray-50 dark:bg-zinc-800/40 rounded-xl border border-dashed border-gray-200 dark:border-zinc-700 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto mb-3 text-lg">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <h5 class="font-semibold text-sm mb-1">No payment methods saved</h5>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-4">You have no saved cards or wallets. Add a payment method to make fast and secure purchases.</p>
+                        <button onclick="openAddPaymentModal()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-xs transition shadow-sm inline-flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Add payment method</span>
+                        </button>
+                    </div>
+                    <div class="p-5 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl border border-purple-200/50 dark:border-purple-900/30">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div>
+                                <h5 class="font-semibold text-sm mb-1">Ready to add a card or PayPal?</h5>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Meta Pay protects your payment info with advanced encryption.</p>
+                            </div>
+                            <button onclick="openAddPaymentModal()" class="w-full sm:w-auto px-5 py-2.5 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-blue-600 dark:text-blue-400 border border-gray-200 dark:border-zinc-700 rounded-xl font-semibold text-xs transition shadow-sm">
+                                Add payment method
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                let cardsHTML = `<div class="space-y-3 mb-6">`;
+                cards.forEach((card) => {
+                    cardsHTML += `
+                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/60 rounded-xl border border-gray-200 dark:border-zinc-700/60">
+                            <div class="flex items-center space-x-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-sm">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-900 dark:text-white">${card.cardNumber}</p>
+                                    <p class="text-xs text-gray-500">Expires ${card.expDate}</p>
+                                </div>
+                            </div>
+                            <button onclick="deletePaymentMethod('${card.id}')" class="text-xs font-semibold text-red-500 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 transition">
+                                Delete
+                            </button>
+                        </div>
+                    `;
+                });
+                cardsHTML += `</div>`;
+                cardsHTML += `
+                    <button onclick="openAddPaymentModal()" class="w-full py-3 border-2 border-dashed border-gray-300 dark:border-zinc-700 hover:border-blue-500 text-gray-600 dark:text-gray-300 rounded-xl font-semibold text-xs transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add another payment method</span>
+                    </button>
+                `;
+                container.innerHTML = cardsHTML;
+            }
+        }
+
+        // Backend Update Helper
+        async function syncStateToBackend(partialData) {
+            localState = { ...localState, ...partialData };
+            renderUIFromState();
+            if (userDocRef) {
+                try {
+                    await updateDoc(userDocRef, partialData);
+                    updateSyncBadge('Cloud Synced', 'emerald');
+                } catch (e) {
+                    await setDoc(userDocRef, localState, { merge: true });
+                    updateSyncBadge('Cloud Synced', 'emerald');
+                }
+            }
+        }
+
+        // Update Cloud Sync Header Status Badge
+        function updateSyncBadge(text, color) {
+            const badge = document.getElementById('cloudSyncStatus');
+            if (!badge) return;
+            if (color === 'emerald') {
+                badge.className = "inline-flex items-center text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800/40 transition-all";
+                badge.innerHTML = `<i class="fa-solid fa-cloud-check mr-1.5 text-xs"></i> ${text}`;
+            } else {
+                badge.className = "inline-flex items-center text-[11px] font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 px-2.5 py-1 rounded-full border border-amber-200 dark:border-amber-800/40 transition-all";
+                badge.innerHTML = `<i class="fa-solid fa-cloud-arrow-up mr-1.5 text-xs"></i> ${text}`;
+            }
+        }
+
+        // Global Exposed Window Handlers
+        window.switchSection = function(sectionId) {
             const sections = document.querySelectorAll('main section');
             sections.forEach(sec => sec.classList.add('hidden'));
 
-            // Show target section
             const target = document.getElementById(`section-${sectionId}`);
-            if (target) {
-                target.classList.remove('hidden');
-            }
+            if (target) target.classList.remove('hidden');
 
-            // Update active sidebar pill styling to match image_986fd8.png
             const navItems = document.querySelectorAll('.nav-item');
             navItems.forEach(item => {
                 const isSelected = item.getAttribute('data-section') === sectionId;
-                if (isSelected) {
-                    item.className = 'nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all bg-[#e3e6ea] text-[#1c1d21] font-semibold';
-                } else {
-                    item.className = 'nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal';
-                }
+                item.className = isSelected
+                    ? 'nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all bg-[#e3e6ea] text-[#1c1d21] font-semibold'
+                    : 'nav-item flex items-center space-x-3.5 px-3.5 py-3 rounded-2xl text-[15px] transition-all text-[#f0f2f5] hover:bg-[#2b2c31] font-normal';
             });
 
-            // Update Top Breadcrumb Text
             const breadcrumbTitles = {
                 overview: "Accounts Center",
                 profiles: "Profiles and personal details",
@@ -647,17 +814,94 @@
                 breadcrumbEl.innerText = breadcrumbTitles[sectionId];
             }
 
-            // Close mobile sidebar if open
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             if (sidebar && overlay) {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
             }
-        }
+        };
 
-        // Toggle Password Field Visibility
-        function togglePasswordVisibility(inputId, btn) {
+        window.openEditModal = function(key, label) {
+            activeFieldKey = key;
+            document.getElementById('modalTitle').innerText = `Edit ${label}`;
+            document.getElementById('modalInputLabel').innerText = label;
+            document.getElementById('modalInputValue').value = localState[key] || '';
+            document.getElementById('editModal').classList.remove('hidden');
+        };
+
+        window.closeEditModal = function() {
+            document.getElementById('editModal').classList.add('hidden');
+        };
+
+        window.saveModalData = async function() {
+            const newVal = document.getElementById('modalInputValue').value.trim();
+            if (newVal && activeFieldKey) {
+                await syncStateToBackend({ [activeFieldKey]: newVal });
+                window.showToast('Profile information updated & saved to Firestore!');
+            }
+            window.closeEditModal();
+        };
+
+        window.toggleSetting = async function(key, isChecked) {
+            await syncStateToBackend({ [key]: isChecked });
+            window.showToast('Preference updated & saved to Firestore');
+        };
+
+        window.openAddPaymentModal = function() {
+            document.getElementById('paymentModal').classList.remove('hidden');
+        };
+
+        window.closeAddPaymentModal = function() {
+            document.getElementById('paymentModal').classList.add('hidden');
+        };
+
+        window.handlePaymentSubmit = async function(e) {
+            e.preventDefault();
+            const cardNum = document.getElementById('cardNumberInput').value.trim();
+            const exp = document.getElementById('cardExpInput').value.trim();
+
+            const last4 = cardNum.length >= 4 ? cardNum.slice(-4) : '4242';
+            const newCard = {
+                id: Date.now().toString(),
+                cardNumber: `•••• •••• •••• ${last4}`,
+                expDate: exp || '12/28'
+            };
+
+            const updatedCards = [...(localState.paymentMethods || []), newCard];
+            await syncStateToBackend({ paymentMethods: updatedCards });
+
+            window.closeAddPaymentModal();
+            window.showToast('Payment method saved to Firestore!');
+            e.target.reset();
+        };
+
+        window.deletePaymentMethod = async function(cardId) {
+            const updatedCards = (localState.paymentMethods || []).filter(c => c.id !== cardId);
+            await syncStateToBackend({ paymentMethods: updatedCards });
+            window.showToast('Payment method removed');
+        };
+
+        window.handlePasswordSubmit = async function(e) {
+            e.preventDefault();
+            const newPass = document.getElementById('newPasswordInput').value;
+            const confirmPass = document.getElementById('confirmPasswordInput').value;
+
+            if (newPass.length < 12) {
+                window.showToast('Password must be at least 12 characters');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                window.showToast('Passwords do not match');
+                return;
+            }
+
+            await syncStateToBackend({ lastPasswordUpdate: new Date().toLocaleDateString() });
+            window.showToast('Password changed & saved to Firestore!');
+            window.resetPasswordForm();
+        };
+
+        window.togglePasswordVisibility = function(inputId, btn) {
             const input = document.getElementById(inputId);
             if (!input) return;
             if (input.type === 'password') {
@@ -667,10 +911,9 @@
                 input.type = 'password';
                 btn.innerText = 'Show';
             }
-        }
+        };
 
-        // Password Strength Indicator Calculation
-        function checkPasswordStrength(val) {
+        window.checkPasswordStrength = function(val) {
             const bar = document.getElementById('strengthBar');
             const text = document.getElementById('strengthText');
             if (!bar || !text) return;
@@ -706,93 +949,33 @@
                 text.innerText = 'Password strength: Strong';
                 text.className = 'text-xs text-emerald-600 dark:text-emerald-400 font-medium';
             }
-        }
+        };
 
-        // Handle Password Form Submission
-        function handlePasswordSubmit(e) {
-            e.preventDefault();
-            const newPass = document.getElementById('newPasswordInput').value;
-            const confirmPass = document.getElementById('confirmPasswordInput').value;
-
-            if (newPass.length < 12) {
-                showToast('New password must be at least 12 characters');
-                return;
-            }
-
-            if (newPass !== confirmPass) {
-                showToast('New passwords do not match');
-                return;
-            }
-
-            showToast('Password updated successfully!');
-            resetPasswordForm();
-        }
-
-        // Reset Password Form Fields
-        function resetPasswordForm() {
+        window.resetPasswordForm = function() {
             const form = document.getElementById('passwordForm');
             if (form) form.reset();
-            checkPasswordStrength('');
-        }
+            window.checkPasswordStrength('');
+        };
 
-        // Mobile Sidebar Controls
-        function toggleSidebar() {
+        window.toggleSidebar = function() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             if (sidebar && overlay) {
                 sidebar.classList.toggle('-translate-x-full');
                 overlay.classList.toggle('hidden');
             }
-        }
+        };
 
-        // Dark Mode Theme Switcher
-        function toggleDarkMode() {
+        window.toggleDarkMode = function() {
             const html = document.documentElement;
             html.classList.toggle('dark');
             const icon = document.getElementById('themeIcon');
             if (icon) {
-                if (html.classList.contains('dark')) {
-                    icon.className = "fa-solid fa-sun";
-                } else {
-                    icon.className = "fa-solid fa-moon";
-                }
+                icon.className = html.classList.contains('dark') ? "fa-solid fa-sun" : "fa-solid fa-moon";
             }
-        }
+        };
 
-        // Edit Profile Details Modal
-        function openEditModal(field, currentVal) {
-            document.getElementById('modalTitle').innerText = `Edit ${field}`;
-            document.getElementById('modalInputLabel').innerText = field;
-            document.getElementById('modalInputValue').value = currentVal;
-            document.getElementById('editModal').classList.remove('hidden');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.add('hidden');
-        }
-
-        function saveModalData() {
-            closeEditModal();
-            showToast('Changes saved successfully');
-        }
-
-        // Add Payment Method Modal
-        function openAddPaymentModal() {
-            document.getElementById('paymentModal').classList.remove('hidden');
-        }
-
-        function closeAddPaymentModal() {
-            document.getElementById('paymentModal').classList.add('hidden');
-        }
-
-        function handlePaymentSubmit(e) {
-            e.preventDefault();
-            closeAddPaymentModal();
-            showToast('Payment method added successfully');
-        }
-
-        // Toast Alert System
-        function showToast(message) {
+        window.showToast = function(message) {
             const toast = document.getElementById('toast');
             if (!toast) return;
             document.getElementById('toastMessage').innerText = message;
@@ -800,16 +983,13 @@
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0');
             }, 3500);
-        }
+        };
 
-        // Initial setup on page load
+        // Initialize App & Backend on Load
         window.addEventListener('DOMContentLoaded', () => {
             const hash = window.location.hash.replace('#', '');
-            if (hash && document.getElementById(`section-${hash}`)) {
-                switchSection(hash);
-            } else {
-                switchSection('password');
-            }
+            window.switchSection(hash && document.getElementById(`section-${hash}`) ? hash : 'password');
+            initBackendService();
         });
     </script>
 </body>
